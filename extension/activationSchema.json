@@ -1,0 +1,140 @@
+{
+  "types": {
+    "dynatrace.datasource.python:ext_ddu_monitoring-endpoint": {
+      "type": "object",
+      "displayName": "Extension DDU monitoring endpoint",
+      "summaryPattern": "Extension DDU monitoring for environment {environment_url}",
+      "properties": {
+        "environment_url": {
+          "displayName": "Dynatrace Environment URL",
+          "description": "Managed: https://{your-domain}/e/{your-environment-id} | SaaS: https://{your-environment-id}.live.dynatrace.com",
+          "type": "text",
+          "nullable": false,
+          "default": "",
+          "constraints": [
+            {
+              "type": "LENGTH",
+              "minLength": 1,
+              "maxLength": 500
+            }
+          ],
+          "maxItems": 1
+        },
+        "api_token": {
+          "displayName": "Dynatrace API token",
+          "description": "\"Read problems\", \"Write problems\", \"Read entities\", \"Read metrics\", \"Read extensions\" and \"Read extension monitoring configurations\" permissions required",
+          "type": "secret",
+          "nullable": false,
+          "default": "",
+          "constraints": [
+            {
+              "type": "LENGTH",
+              "minLength": 1,
+              "maxLength": 500
+            }
+          ],
+          "maxItems": 1
+        },
+        "problem_text": {
+          "displayName": "Analyze problems containing the given text in the problem text (max 30 chars)",
+          "type": "text",
+          "nullable": false,
+          "default": "",
+          "constraints": [
+            {
+              "type": "LENGTH",
+              "minLength": 1,
+              "maxLength": 30
+            }
+          ],
+          "maxItems": 1
+        },
+        "datapoint_delta_threshold": {
+          "displayName": "Consider only extensions where the given threshold for increased datapoints is exceeded",
+          "type": "integer",
+          "nullable": false,
+          "default": 1,
+          "constraints": [
+            {
+              "type": "RANGE",
+              "minimum": 1,
+              "maximum": 100000
+            }
+          ],
+          "maxItems": 1
+        },
+        "verify_ssl": {
+          "displayName": "Enable SSL verification for API requests",
+          "type": "boolean",
+          "default": true,
+          "maxItems": 1
+        }
+      }
+    },
+    "pythonRemote": {
+      "type": "object",
+      "properties": {
+        "endpoints": {
+          "displayName": "Ext_ddu_monitoring endpoint",
+          "type": "list",
+          "items": {
+            "type": {
+              "$ref": "#/types/dynatrace.datasource.python:ext_ddu_monitoring-endpoint"
+            }
+          },
+          "nullable": false,
+          "minItems": 1,
+          "maxItems": 100,
+          "metaData": {
+            "addItemButton": "Add endpoint"
+          }
+        }
+      }
+    },
+    "pythonLocal": {
+      "type": "object",
+      "properties": {
+        "endpoints": {
+          "displayName": "Ext_ddu_monitoring endpoint",
+          "type": "list",
+          "items": {
+            "type": {
+              "$ref": "#/types/dynatrace.datasource.python:ext_ddu_monitoring-endpoint"
+            }
+          },
+          "nullable": false,
+          "minItems": 1,
+          "maxItems": 100,
+          "metaData": {
+            "addItemButton": "Add endpoint"
+          }
+        }
+      }
+    }
+  },
+  "dynatrace": "1",
+  "description": "ext_ddu_monitoring configuration",
+  "schemaId": "python-extension.activation",
+  "displayName": "ext_ddu_monitoring configuration",
+  "ownerProductManagement": "dynatrace",
+  "ownerDevelopment": "dynatrace",
+  "maturity": "IN_DEVELOPMENT",
+  "allowedScopes": [
+    "tenant"
+  ],
+  "multiObject": false,
+  "properties": {
+    "pythonLocal": {
+      "displayName": "Python Local Extension",
+      "type": {
+        "$ref": "#/types/pythonLocal"
+      }
+    },
+    "pythonRemote": {
+      "displayName": "Python Remote Extension",
+      "type": {
+        "$ref": "#/types/pythonRemote"
+      }
+    }
+  }
+}

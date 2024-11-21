@@ -1,0 +1,17 @@
+{
+	"enabled": true,
+	"description": "ext_ddu_monitoring activation",
+	"version": "0.0.1",
+	"activationContext": "REMOTE",
+	"pythonRemote": {
+		"endpoints": [
+			{
+				"environment_url": "",
+				"api_token": "",
+				"problem_text": "DDU Monitoring Alert",
+				"datapoint_delta_threshold": 1,
+				"verify_ssl": true
+			}
+		]
+	}
+}

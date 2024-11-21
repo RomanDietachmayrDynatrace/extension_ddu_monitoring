@@ -1,0 +1,17 @@
+name: custom:ext-ddu-monitoring
+version: 0.0.1
+minDynatraceVersion: "1.285"
+author:
+  name: "Dynatrace"
+
+python:
+  runtime:
+    module: ext_ddu_monitoring
+    version:
+      min: "3.10"
+
+  activation:
+    remote:
+      path: activationSchema.json
+    local:
+      path: activationSchema.json
