@@ -91,7 +91,8 @@ class ExtensionImpl(Extension):
                 "pageSize": 10,
                 "from": problem_time_from, 
                 "to": problem_time_to, 
-                "problemSelector": problem_selector
+                "problemSelector": problem_selector,
+                "fields": "recentComments"
             }
             response = requests.get(problems_api, params, verify=verify_ssl)
             problems = response.json()["problems"]
