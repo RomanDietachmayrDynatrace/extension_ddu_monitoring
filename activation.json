@@ -1,7 +1,7 @@
 {
 	"enabled": true,
 	"description": "ext_ddu_monitoring activation",
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"activationContext": "REMOTE",
 	"pythonRemote": {
 		"endpoints": [

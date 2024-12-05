@@ -1,5 +1,5 @@
 name: custom:ext-ddu-monitoring
-version: 0.0.3
+version: 0.0.4
 minDynatraceVersion: "1.285"
 author:
   name: "Dynatrace"
