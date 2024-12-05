@@ -29,7 +29,6 @@ class ExtensionImpl(Extension):
 
             # Threshold for datapoint increase to define which extensions should be considered for analysis
             datapoint_delta_threshold = endpoint["datapoint_delta_threshold"]
-            datapoint_delta_threshold = 0
 
             # Enable/disable verify SSL certificate for API requests
             verify_ssl = endpoint["verify_ssl"]
@@ -97,7 +96,7 @@ class ExtensionImpl(Extension):
             response = requests.get(problems_api, params, verify=verify_ssl)
             problems = response.json()["problems"]
 
-            self.logger.info(f"Detected {len(problems)} problems for analysis.")
+            self.logger.info(f"Number of detected problems for analysis: {len(problems)}.")
 
             # Start root cause analysis of DDU spike for each problem
             # =================================================================================
@@ -343,24 +342,41 @@ class ExtensionImpl(Extension):
                             # ActiveGate extensions are assumed to be billable
                             bill_affecting_extensions.append(ext)
 
+                    # Post comment to problem with analysis result
+                    # =================================================================================
+                    
+                    problem_id = problem["problemId"]
+                    problem_comment_api = environment_url + f"/api/v2/problems/{problem_id}/comments"
+
                     if len(bill_affecting_extensions) > 0:
                         
                         self.logger.info(f"Detected {len(bill_affecting_extensions)} bill-affecting extensions.")
 
-                        message = "Root cause analysis result: \n"
+                        message = "DDU root cause analysis: \n"
                         
                         for ext in bill_affecting_extensions:
-                            message += f"Extension: {ext.extension_name} \nConfig ID: {ext.config_id} \nData point increase: {ext.delta()} \nAffected Entities: {', '.join(ext.affected_entities)} \n"
+                            message += f"Extension: {ext.extension_name} \nConfig ID: {ext.config_id} \nData point increase: {ext.delta()} \nAffected Entities: {', '.join(ext.affected_entities)} \n====================\n"
                     
-                        problem_id = problem["problemId"]
-                        problem_comment_api = environment_url + f"/api/v2/problems/{problem_id}/comments"
                         params = {
                             "api-token": api_token, 
                             "message": message
                         }
                         requests.post(problem_comment_api, params, verify=verify_ssl)
 
-                        self.logger.info(f"Commented analysis result on problem {problem_id}.")
+                    else:
+                        self.logger.info("No bill-affecting extensions were detected.")
+                        
+                        message = "DDU root cause analysis: \nNo bill-affecting extensions were detected."
+                        params = {
+                            "api-token": api_token, 
+                            "message": message
+                        }
+                        requests.post(problem_comment_api, params, verify=verify_ssl)
+                        
+                    self.logger.info(f"Added comment with analysis result to problem {problem_id}.")
+
+                else:
+                    self.logger.info(f"Problem with ID {problem['problemId']} has already been analyzed.")
 
             self.logger.info(f"Finished analysis of DDU problems.")    
 
